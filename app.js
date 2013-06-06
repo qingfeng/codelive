@@ -5,13 +5,13 @@ express = require('express.io');
 
 app = express();
 
-app.http.io();
+app.http().io();
 
 app.io.route('ready', function(req) {
   req.io.join(req.data);
-  return req.io.room(req.data.broadcast('announce', {
+  return req.io.room(req.data).broadcast('announce', {
     message: 'New client in the ' + req.data + ' room. '
-  }));
+  });
 });
 
 app.get('/', function(req, res) {
