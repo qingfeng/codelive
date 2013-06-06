@@ -1,0 +1,9 @@
+{
+    "name": "codelive",
+    "version": "1.0.0",
+    "author": "Qing Feng <qingfeng@douban.com>",
+    "dependencies": {
+        "express.io": "*",
+        "redis": "*"
+    }
+}
