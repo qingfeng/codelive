@@ -1,0 +1,4 @@
+*.sw[mnpo]
+*.DS_Store
+.#*
+/node_modules
