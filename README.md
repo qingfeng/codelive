@@ -7,6 +7,7 @@
 # 开发环境
 
 - npm install -g coffee-script
+- npm install
 - coffee -cbwo . coffee/
 
 また今回コンパイル時に使うオプションは3つです。
