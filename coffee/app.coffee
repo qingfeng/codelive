@@ -1,14 +1,15 @@
+util = require 'util'
 express = require 'express.io'
 app = express()
 app.http().io()
 
 app.io.route 'ready', (req) ->
-    req.io.join req.data
-    req.io.room(req.data).broadcast 'announce', {
-        message: 'New client in the ' + req.data + ' room. '
-    }
+  channel = req.data.channel
+  msg = req.data.msg
+  req.io.join channel
+  app.io.room(channel).broadcast 'announce', {
+    message: msg
+  }
 
-app.get '/', (req, res) ->
-    res.sendfile __dirname + '/client.html'
-
+util.log 'server start'
 app.listen 7076
