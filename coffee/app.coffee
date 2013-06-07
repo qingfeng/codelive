@@ -7,7 +7,7 @@ app.io.route 'ready', (req) ->
   channel = req.data.channel
   msg = req.data.msg
   req.io.join channel
-  app.io.room(channel).broadcast 'announce', {
+  req.io.room(channel).broadcast 'announce', {
     message: msg
   }
 

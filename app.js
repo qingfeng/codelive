@@ -14,7 +14,7 @@ app.io.route('ready', function(req) {
   channel = req.data.channel;
   msg = req.data.msg;
   req.io.join(channel);
-  return app.io.room(channel).broadcast('announce', {
+  return req.io.room(channel).broadcast('announce', {
     message: msg
   });
 });
