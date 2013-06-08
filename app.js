@@ -10,11 +10,15 @@ app = express();
 app.http().io();
 
 app.io.route('ready', function(req) {
-  var channel, msg;
+  var channel, msg, type, username;
   channel = req.data.channel;
   msg = req.data.msg;
+  type = req.data.type;
+  username = req.data.username;
   req.io.join(channel);
   return req.io.room(channel).broadcast('announce', {
+    username: username,
+    type: type,
     message: msg
   });
 });
