@@ -6,8 +6,6 @@ app = express()
 app.http().io()
 
 user_avatar = (user) ->
-  if not user
-    user
   email = "#{user}@douban.com"
   md5 = crypto.createHash 'md5'
   md5.update email

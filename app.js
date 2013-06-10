@@ -15,9 +15,6 @@ app.http().io();
 
 user_avatar = function(user) {
   var email, md5, normal, q, url;
-  if (!user) {
-    user;
-  }
   email = "" + user + "@douban.com";
   md5 = crypto.createHash('md5');
   md5.update(email);
