@@ -29,17 +29,26 @@ user_avatar = function(user) {
 };
 
 app.io.route('ready', function(req) {
-  var channel, msg, type, username;
+  var channel;
   channel = req.data.channel;
-  msg = req.data.msg;
-  type = req.data.type;
-  username = req.data.username;
+  util.log("new user in this page: " + channel);
   req.io.join(channel);
-  return req.io.room(channel).broadcast('announce', {
-    username: username,
+});
+
+var redis = require('redis');
+client = redis.createClient();
+client.subscribe('codelive');
+client.on('message', function(channel, message) {
+  var message = JSON.parse(message);
+  var io_channel = message.channel;
+  util.log("io channel: " + io_channel);
+  var msg = message.action_data;
+  util.log("send message: " + msg);
+  var username = JSON.parse(msg).author;
+  util.log("username: " + username);
+  app.io.room(io_channel).broadcast('announce', {
     avatar: user_avatar(username),
-    type: type,
-    message: msg
+    send_message: msg
   });
 });
 
