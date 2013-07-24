@@ -29,10 +29,10 @@ client.on 'message', (channel, data) ->
   util.log 'io_channel: ' + io_channel
   msg = message.action_data
   util.log 'msg: ' + msg
-  username = JSON.parse(msg).author
-  util.log 'username: ' + username
+  #username = JSON.parse(msg).author
+  #util.log 'username: ' + username
   app.io.room(io_channel).broadcast 'announce', {
-    avatar: user_avatar(username),
+  #  avatar: user_avatar(username),
     send_message: msg
   }
 

@@ -42,16 +42,13 @@ client = redis.createClient();
 client.subscribe('codelive');
 
 client.on('message', function(channel, data) {
-  var io_channel, message, msg, username;
+  var io_channel, message, msg;
   message = JSON.parse(data);
   io_channel = message.channel;
   util.log('io_channel: ' + io_channel);
   msg = message.action_data;
   util.log('msg: ' + msg);
-  username = JSON.parse(msg).author;
-  util.log('username: ' + username);
   return app.io.room(io_channel).broadcast('announce', {
-    avatar: user_avatar(username),
     send_message: msg
   });
 });
