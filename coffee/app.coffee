@@ -19,6 +19,16 @@ app.io.route 'ready', (req) ->
   channel = req.data.channel
   util.log 'new user in this page: ' + channel
   req.io.join channel
+  if channel.indexOf("code_pr") == 0 or channel.indexOf("code_issue") == 0
+    msg = req.data.msg
+    type = req.data.type
+    username = req.data.username
+    req.io.room(channel).broadcast 'announce', {
+      username: username,
+      avatar: user_avatar(username),
+      type: type,
+      message: msg
+    }
 
 client = redis.createClient()
 client.subscribe('codelive')
@@ -26,13 +36,8 @@ client.subscribe('codelive')
 client.on 'message', (channel, data) ->
   message = JSON.parse(data)
   io_channel = message.channel
-  util.log 'io_channel: ' + io_channel
   msg = message.action_data
-  util.log 'msg: ' + msg
-  #username = JSON.parse(msg).author
-  #util.log 'username: ' + username
   app.io.room(io_channel).broadcast 'announce', {
-  #  avatar: user_avatar(username),
     send_message: msg
   }
 
