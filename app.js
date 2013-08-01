@@ -31,10 +31,21 @@ user_avatar = function(user) {
 };
 
 app.io.route('ready', function(req) {
-  var channel;
+  var channel, msg, type, username;
   channel = req.data.channel;
   util.log('new user in this page: ' + channel);
-  return req.io.join(channel);
+  req.io.join(channel);
+  if (channel.indexOf("code_pr") === 0 || channel.indexOf("code_issue") === 0) {
+    msg = req.data.msg;
+    type = req.data.type;
+    username = req.data.username;
+    return req.io.room(channel).broadcast('announce', {
+      username: username,
+      avatar: user_avatar(username),
+      type: type,
+      message: msg
+    });
+  }
 });
 
 client = redis.createClient();
@@ -45,9 +56,7 @@ client.on('message', function(channel, data) {
   var io_channel, message, msg;
   message = JSON.parse(data);
   io_channel = message.channel;
-  util.log('io_channel: ' + io_channel);
   msg = message.action_data;
-  util.log('msg: ' + msg);
   return app.io.room(io_channel).broadcast('announce', {
     send_message: msg
   });
