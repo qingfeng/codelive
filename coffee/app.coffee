@@ -41,7 +41,6 @@ client.on 'message', (channel, data) ->
   message = JSON.parse(data)
   io_channel = message.channels
   msg = message.data
-  util.log msg
   app.io.room(io_channel).broadcast 'announce', {
     send_message: msg
   }
