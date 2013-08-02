@@ -48,15 +48,16 @@ app.io.route('ready', function(req) {
   }
 });
 
-client = redis.createClient();
+client = redis.createClient(6404, 'counter-redis-m');
 
 client.subscribe('codelive');
 
 client.on('message', function(channel, data) {
   var io_channel, message, msg;
   message = JSON.parse(data);
-  io_channel = message.channel;
-  msg = message.action_data;
+  io_channel = message.channels;
+  msg = message.data;
+  util.log(msg);
   return app.io.room(io_channel).broadcast('announce', {
     send_message: msg
   });
