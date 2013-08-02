@@ -5,6 +5,7 @@ express = require 'express.io'
 redis = require 'redis'
 app = express()
 app.http().io()
+DEVELOP_MODE = false
 
 user_avatar = (user) ->
   email = "#{user}@douban.com"
@@ -30,8 +31,10 @@ app.io.route 'ready', (req) ->
       message: msg
     }
 
-client = redis.createClient(6404, 'counter-redis-m')
-#client = redis.createClient()
+if DEVELOP_MODE
+  client = redis.createClient()
+else
+  client = redis.createClient(6404, 'counter-redis-m')
 client.subscribe('codelive')
 
 client.on 'message', (channel, data) ->
