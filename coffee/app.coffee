@@ -2,6 +2,7 @@ util = require 'util'
 querystring = require 'querystring'
 crypto = require 'crypto'
 express = require 'express.io'
+redis = require 'redis'
 app = express()
 app.http().io()
 
@@ -16,15 +17,28 @@ user_avatar = (user) ->
 
 app.io.route 'ready', (req) ->
   channel = req.data.channel
-  msg = req.data.msg
-  type = req.data.type
-  username = req.data.username
+  util.log 'new user in this page: ' + channel
   req.io.join channel
-  req.io.room(channel).broadcast 'announce', {
-    username: username,
-    avatar: user_avatar(username),
-    type: type,
-    message: msg
+  if channel.indexOf("code_pr") == 0 or channel.indexOf("code_issue") == 0
+    msg = req.data.msg
+    type = req.data.type
+    username = req.data.username
+    req.io.room(channel).broadcast 'announce', {
+      username: username,
+      avatar: user_avatar(username),
+      type: type,
+      message: msg
+    }
+
+client = redis.createClient()
+client.subscribe('codelive')
+
+client.on 'message', (channel, data) ->
+  message = JSON.parse(data)
+  io_channel = message.channel
+  msg = message.action_data
+  app.io.room(io_channel).broadcast 'announce', {
+    send_message: msg
   }
 
 util.log 'server start'
