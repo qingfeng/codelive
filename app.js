@@ -64,7 +64,8 @@ client.on('message', function(channel, data) {
   io_channel = message.channels;
   msg = message.data;
   return app.io.room(io_channel).broadcast('announce', {
-    send_message: msg
+    send_message: msg,
+    channel: io_channel
   });
 });
 

@@ -42,7 +42,8 @@ client.on 'message', (channel, data) ->
   io_channel = message.channels
   msg = message.data
   app.io.room(io_channel).broadcast 'announce', {
-    send_message: msg
+    send_message: msg,
+    channel: io_channel
   }
 
 util.log 'server start'
